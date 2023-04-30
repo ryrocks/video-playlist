@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { PlaylistItem } from '../components/playlist-item';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { useFetchPlaylists } from '../hooks/useFetchPlaylists';
+import { usePlaylists } from '../hooks/usePlaylists';
+import PlaylistItem from '../components/playlist-item/playlist-item';
 
 
 export function Playlists() {
-  const { playlists, handleSetPlaylists } = useFetchPlaylists();
+  const { playlists, handleSetPlaylists } = usePlaylists();
   const [showModal, setShowModal] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [newPlaylistDescription, setNewPlaylistDescription] = useState('');
