@@ -7,8 +7,11 @@ import PlaylistItem from '../components/playlist-item/playlist-item';
 export function Playlists() {
   const { playlists, handleSetPlaylists } = usePlaylists();
   const [showModal, setShowModal] = useState(false);
-  const [newPlaylistName, setNewPlaylistName] = useState('');
-  const [newPlaylistDescription, setNewPlaylistDescription] = useState('');
+  const [newPlaylistName, setNewPlaylistName] = useState<string>('');
+  const [newPlaylistDescription, setNewPlaylistDescription] = useState<string>('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePlaylistId, setDeletePlaylistId] = useState<number | null>(null);
+
 
   const handleCreatePlaylist = () => {
     const newPlaylist = {
@@ -30,6 +33,13 @@ export function Playlists() {
   const handleDeletePlaylist = (id: number) => {
     const updatedPlaylists = playlists.filter((playlist) => playlist.id !== id);
     handleSetPlaylists(updatedPlaylists);
+    setShowDeleteModal(false);
+    setDeletePlaylistId(null);
+  };
+
+  const handleShowDeleteModal = (id: number) => {
+    setShowDeleteModal(true);
+    setDeletePlaylistId(id);
   };
 
   return (
@@ -37,7 +47,7 @@ export function Playlists() {
       <h1>Playlists route</h1>
       <Button className="mb-3" onClick={() => setShowModal(true)}>Create Playlist</Button>
       {playlists.map((playlist) => (
-        <PlaylistItem key={playlist.id} playlist={playlist} onDelete={() => handleDeletePlaylist(playlist.id)} />
+        <PlaylistItem key={playlist.id} playlist={playlist} onDelete={() => handleShowDeleteModal(playlist.id)} />
       ))}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
@@ -72,6 +82,33 @@ export function Playlists() {
           </Button>
           <Button variant="primary" onClick={handleCreatePlaylist}>
             Create Playlist
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {deletePlaylistId && (
+            <>
+              Are you sure you want to delete the playlist{' '}
+              <strong>
+                {
+                  playlists.find((playlist) => playlist.id === deletePlaylistId)
+                    ?.name
+                }
+              </strong>
+              ?
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={() => handleDeletePlaylist(deletePlaylistId as number)}>
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>
