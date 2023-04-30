@@ -1,12 +1,13 @@
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
 import { Playlist } from '../interfaces/playlist';
 
 interface PlaylistItemProps {
   playlist: Playlist;
+  onDelete: () => void;
 }
 
 export function PlaylistItem(props: PlaylistItemProps) {
-  const { playlist } = props;
+  const { playlist, onDelete } = props;
 
   const videoCount = playlist.videoIds.length === 1 ? '1 video' : `${playlist.videoIds.length} videos`;
 
@@ -18,6 +19,11 @@ export function PlaylistItem(props: PlaylistItemProps) {
       </Col>
       <Col xs='12' md='9'>
         <p className='mb-0'>{playlist.description}</p>
+      </Col>
+      <Col xs='12' className='mt-2'>
+        <Button variant="danger" onClick={onDelete}>
+          Delete
+        </Button>
       </Col>
     </Row>
   )
