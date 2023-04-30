@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { PlaylistItem } from '../components/playlist-item';
-import { Playlist } from '../interfaces/playlist';
 import { Button, Modal, Form } from 'react-bootstrap';
+import { useFetchPlaylists } from '../hooks/useFetchPlaylists';
 
 
 export function Playlists() {
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const { playlists, handleSetPlaylists } = useFetchPlaylists();
   const [showModal, setShowModal] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [newPlaylistDescription, setNewPlaylistDescription] = useState('');
@@ -19,31 +19,18 @@ export function Playlists() {
       dateCreated: new Date().toISOString(),
     };
 
-    setPlaylists([...playlists, newPlaylist]);
+    const updatedPlaylists = [...playlists, newPlaylist];
+    handleSetPlaylists(updatedPlaylists);
+
     setShowModal(false);
     setNewPlaylistName('');
     setNewPlaylistDescription('');
   };
 
   const handleDeletePlaylist = (id: number) => {
-    setPlaylists(playlists.filter((playlist) => playlist.id !== id));
+    const updatedPlaylists = playlists.filter((playlist) => playlist.id !== id);
+    handleSetPlaylists(updatedPlaylists);
   };
-
-  useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const response = await fetch('/playlists.json');
-        const data = await response.json();
-        setPlaylists(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        // console.log('finally');
-      }
-    }
-
-    fetchVideos();
-  }, []);
 
   return (
     <main>
