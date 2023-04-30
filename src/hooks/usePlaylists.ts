@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Playlist } from '../interfaces/playlist';
 import { Video } from '../interfaces/video';
 
-export function usePlaylists(): { playlists: Playlist[]; handleSetPlaylists: (playlists: Playlist[]) => void, handleAddVideoToPlaylist: (playlistId: number, video: Video) => void, handleRemoveVideoFromPlaylist: (playlistId: number, video: Video) => void } {
+export function usePlaylists(): { isLoading: boolean, playlists: Playlist[]; handleSetPlaylists: (playlists: Playlist[]) => void, handleAddVideoToPlaylist: (playlistId: number, video: Video) => void, handleRemoveVideoFromPlaylist: (playlistId: number, video: Video) => void } {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
     const handleSetPlaylists = (playlists: Playlist[]) => {
@@ -38,6 +39,7 @@ export function usePlaylists(): { playlists: Playlist[]; handleSetPlaylists: (pl
         } else {
             const fetchVideos = async () => {
                 try {
+                    setIsLoading(true);
                     const response = await fetch('/playlists.json');
                     const data = await response.json();
                     setPlaylists(data);
@@ -45,7 +47,7 @@ export function usePlaylists(): { playlists: Playlist[]; handleSetPlaylists: (pl
                 } catch (error) {
                     console.error(error);
                 } finally {
-                    // console.log('finally');
+                    setIsLoading(false);
                 }
             };
 
@@ -53,5 +55,5 @@ export function usePlaylists(): { playlists: Playlist[]; handleSetPlaylists: (pl
         }
     }, []);
 
-    return { playlists, handleSetPlaylists, handleAddVideoToPlaylist, handleRemoveVideoFromPlaylist };
+    return { isLoading, playlists, handleSetPlaylists, handleAddVideoToPlaylist, handleRemoveVideoFromPlaylist };
 }

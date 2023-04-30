@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import VideoItem from '../components/video-item';
 import { usePlaylists } from '../hooks/usePlaylists';

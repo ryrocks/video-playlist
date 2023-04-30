@@ -3,6 +3,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { NotFound, Playlists, PlaylistVideos, Videos } from './routes';
 import Layout from './components/layout';
 
+// TODO: use lazy loading for routes
+// TODO: use Suspense for routes
 export default function App() {
   return (
     <Routes>

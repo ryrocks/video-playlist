@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { usePlaylists } from '../hooks/usePlaylists';
 import PlaylistItem from '../components/playlist-item/playlist-item';
@@ -12,8 +12,7 @@ export function Playlists() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletePlaylistId, setDeletePlaylistId] = useState<number | null>(null);
 
-
-  const handleCreatePlaylist = () => {
+  const handleCreatePlaylist = useCallback(() => {
     const newPlaylist = {
       id: Date.now(),
       name: newPlaylistName,
@@ -28,19 +27,19 @@ export function Playlists() {
     setShowModal(false);
     setNewPlaylistName('');
     setNewPlaylistDescription('');
-  };
+  }, [newPlaylistName, newPlaylistDescription, playlists, handleSetPlaylists]);
 
-  const handleDeletePlaylist = (id: number) => {
+  const handleDeletePlaylist = useCallback((id: number) => {
     const updatedPlaylists = playlists.filter((playlist) => playlist.id !== id);
     handleSetPlaylists(updatedPlaylists);
     setShowDeleteModal(false);
     setDeletePlaylistId(null);
-  };
+  }, [playlists, handleSetPlaylists]);
 
-  const handleShowDeleteModal = (id: number) => {
+  const handleShowDeleteModal = useCallback((id: number) => {
     setShowDeleteModal(true);
     setDeletePlaylistId(id);
-  };
+  }, []);
 
   return (
     <main>
