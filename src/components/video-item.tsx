@@ -8,10 +8,11 @@ interface VideoItemProps {
   playlists: Playlist[];
   onAdd: (playlistId: number, video: Video) => void;
   onRemove: (playlistId: number, video: Video) => void;
+  enableSelect?: boolean;
 }
 
 export default function VideoItem(props: VideoItemProps) {
-  const { video, playlists, onAdd, onRemove } = props;
+  const { video, playlists, onAdd, onRemove, enableSelect } = props;
 
   const handleAddToPlaylist = (playlistId: number) => {
     onAdd(playlistId, video);
@@ -23,10 +24,16 @@ export default function VideoItem(props: VideoItemProps) {
 
   return (
     <Row>
+      {enableSelect ?
+        <Col xs='12' md='1' className='mb-3 d-flex justify-content-center'>
+          <Form.Check
+            type='checkbox'
+            className='align-self-center'
+          /></Col> : null}
       <Col xs='12' md='3' className='mb-3'>
         <Image fluid rounded src={`${video.thumbnail}?size=small`} alt={video.name} className='w-100' />
       </Col>
-      <Col xs='12' md='9' className='mb-3'>
+      <Col xs='12' md={enableSelect ? 8 : 9} className='mb-3'>
         <h2 className='h4'>{video.name}</h2>
         <p>{video.description}</p>
         <Dropdown autoClose="outside" id={`video-${video.id}-dropdown`}>
