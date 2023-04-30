@@ -1,4 +1,5 @@
-import { Col, Image, Row, Form, Dropdown, DropdownButton } from 'react-bootstrap';
+import React from 'react';
+import { Col, Image, Row, Dropdown, Form } from 'react-bootstrap';
 import { Video } from '../interfaces/video';
 import { Playlist } from '../interfaces/playlist';
 
@@ -28,25 +29,24 @@ export default function VideoItem(props: VideoItemProps) {
       <Col xs='12' md='9' className='mb-3'>
         <h2 className='h4'>{video.name}</h2>
         <p>{video.description}</p>
-        {/* TODO: migrate two DropdownButtons to one */}
-        <Form>
-          <DropdownButton className="mb-2" id={`video-${video.id}-dropdown`} title="Add to playlist">
+        <Dropdown autoClose="outside" id={`video-${video.id}-dropdown`}>
+          <Dropdown.Toggle variant="primary" id="dropdown-basic">
+            Add to playlist
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
             {playlists.map((playlist) => (
-              <Dropdown.Item key={playlist.id} onClick={() => handleAddToPlaylist(playlist.id)}>
-                <Form.Check label={playlist.name}></Form.Check>
-              </Dropdown.Item>
+              <div className='px-3 py-1' key={playlist.id}>
+                <Form.Check type='checkbox' label={playlist.name} defaultChecked={playlist.videoIds.includes(video.id)} onChange={() => {
+                  if (playlist.videoIds.includes(video.id)) {
+                    handleRemoveFromPlaylist(playlist.id)
+                  } else {
+                    handleAddToPlaylist(playlist.id)
+                  }
+                }} />
+              </div>
             ))}
-          </DropdownButton>
-        </Form>
-        <Form>
-          <DropdownButton id={`video-${video.id}-dropdown-remove`} title="Remove from playlist">
-            {playlists.map((playlist) => (
-              <Dropdown.Item key={playlist.id} onClick={() => handleRemoveFromPlaylist(playlist.id)}>
-                <Form.Check label={playlist.name}></Form.Check>
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
-        </Form>
+          </Dropdown.Menu>
+        </Dropdown>
       </Col>
     </Row>
   )
