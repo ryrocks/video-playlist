@@ -35,7 +35,7 @@ export function Playlists() {
   return (
     <main>
       <h1>Playlists route</h1>
-      <Button onClick={() => setShowModal(true)}>Create Playlist</Button>
+      <Button className="mb-3" onClick={() => setShowModal(true)}>Create Playlist</Button>
       {playlists.map((playlist) => (
         <PlaylistItem key={playlist.id} playlist={playlist} onDelete={() => handleDeletePlaylist(playlist.id)} />
       ))}
